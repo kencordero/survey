@@ -63,7 +63,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	 * Check if the database already exist to avoid re-copying the file each time you open the application.
 	 * @return true if it exists, false if it doesn't
 	 */
-	private boolean checkDatabase(){
+	private boolean checkDatabase() {
 		Log.i(TAG, "checkDatabase");
 		SQLiteDatabase database = null;
 
@@ -84,7 +84,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	 * system folder, from where it can be accessed and handled.
 	 * This is done by transferring bytestream.
 	 * */
-	private void copyDatabase() throws IOException{
+	private void copyDatabase() throws IOException {
 		Log.i(TAG, "copyDatabase");
 		//Open your local db as the input stream
 		InputStream myInput = mContext.getAssets().open(mDbName);
@@ -133,10 +133,14 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	}
 
 	@Override
-	public void onCreate(SQLiteDatabase db) { }
+	public void onCreate(SQLiteDatabase db) {
+		Log.i(TAG, "onCreate");
+	}
 
 	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) { }
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		Log.i(TAG, "onUpgrade");
+	}
 
 	// Add your public helper methods to access and get content from the database.
 	// You could return cursors by doing "return myDataBase.query(....)" so it'd be easy

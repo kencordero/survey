@@ -1,7 +1,5 @@
 package com.executiveboard.wsa.survey;
 
-import com.executiveboard.wsa.survey.models.Item;
-
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,16 +12,29 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.executiveboard.wsa.survey.models.Item;
+import com.executiveboard.wsa.survey.models.ResponseOption;
+import com.executiveboard.wsa.survey.models.ResponseScale;
+
 public class SurveyItemFragment extends Fragment {
 	private static final String TAG = "SurveyItemFragment";
 	private static final String EXTRA_ITEM_ID = "com.executiveboard.wsa.survey.item_id";
 	private static final String DB_NAME = "survey.db3";
 	private SQLiteDatabase mDatabase;
 	
-	private static class PlaceholderData
-	{
-		final static String item = "The people I work with cooperate to get the job done.";
-		final static String[] responseOptions = {"Strongly Disagree", "Disagree", "Neither Agree Nor Disagree", "Agree", "Strongly Agree"};
+	public static class PlaceholderData {
+		public static Item item;
+		public static void init() {
+			ResponseScale scale = new ResponseScale();		
+			scale.addOption(new ResponseOption("Strongly Agree"));
+			scale.addOption(new ResponseOption("Agree"));
+			scale.addOption(new ResponseOption("Neither Agree Nor Disagree"));
+			scale.addOption(new ResponseOption("Disagree"));
+			scale.addOption(new ResponseOption("Strongly Disagree"));
+		
+			item = new Item("The people I work with cooperate to get the job done.");
+			item.setResponseScale(scale);
+		}
 	}
 	
 	@Override
@@ -44,9 +55,10 @@ public class SurveyItemFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 		Log.i(TAG, "onCreateView");
 		View view = inflater.inflate(R.layout.fragment_survey_item, parent, false);
+		PlaceholderData.init();
 		
 		TextView itemTextView = (TextView)view.findViewById(R.id.surveyItemText);		
-		itemTextView.setText(PlaceholderData.item);
+		itemTextView.setText(PlaceholderData.item.getText());
 		
 		final Button submitButton = (Button)view.findViewById(R.id.buttonSubmit);
 		submitButton.setEnabled(false);
@@ -58,8 +70,8 @@ public class SurveyItemFragment extends Fragment {
 		});
 		
 		LinearLayout ll = (LinearLayout)view.findViewById(R.id.responseOptionsLayout);
-		for (int i = 0; i < PlaceholderData.responseOptions.length; ++i) {
-			final String text = PlaceholderData.responseOptions[i];
+		for (int i = 0; i < PlaceholderData.item.getOptionCount(); ++i) {
+			final String text = PlaceholderData.item.getOption(i).getText();
 			Button button = new Button(getActivity());
 			button.setText(text);
 			button.setOnClickListener(new View.OnClickListener() {
