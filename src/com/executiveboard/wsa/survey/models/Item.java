@@ -33,11 +33,7 @@ public class Item {
 		mResponseScale = scale;
 	}
 	
-	public ResponseScale getResponseScale() {
-		return mResponseScale;
-	}
-	
-	public ArrayList<ResponseOption> getResponseOptions() {
+	public ArrayList<ResponseOption> getOptions() {
 		return mResponseScale.getResponseOptions();
 	}
 	

@@ -21,6 +21,10 @@ public class ResponseScale {
 		mResponseOptions.add(option);
 	}
 	
+	public void addOption(String optionText) {
+		addOption(new ResponseOption(optionText));
+	}
+	
 	public ArrayList<ResponseOption> getResponseOptions() {
 		return mResponseOptions;
 	}

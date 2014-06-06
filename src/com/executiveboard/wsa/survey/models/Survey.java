@@ -17,6 +17,10 @@ public class Survey {
 		mItems.add(i);
 	}
 	
+	public void addItem(String itemText, ResponseScale scale) {
+		addItem(new Item(itemText, scale));		
+	}
+	
 	public void deleteItem(Item i) {
 		mItems.remove(i);
 	}

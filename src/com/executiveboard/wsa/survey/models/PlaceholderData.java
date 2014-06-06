@@ -5,22 +5,29 @@ public class PlaceholderData {
 		
 	public static void init() {
 		if (sSurvey == null) {
-			ResponseScale agreeScale = new ResponseScale();		
-			agreeScale.addOption(new ResponseOption("Strongly Agree"));
-			agreeScale.addOption(new ResponseOption("Agree"));
-			agreeScale.addOption(new ResponseOption("Neither Agree Nor Disagree"));
-			agreeScale.addOption(new ResponseOption("Disagree"));
-			agreeScale.addOption(new ResponseOption("Strongly Disagree"));
+			ResponseScale agreementScale = new ResponseScale();		
+			agreementScale.addOption("Strongly Agree");
+			agreementScale.addOption("Agree");
+			agreementScale.addOption("Neither Agree Nor Disagree");
+			agreementScale.addOption("Disagree");
+			agreementScale.addOption("Strongly Disagree");
 				
 			ResponseScale frequencyScale = new ResponseScale();
-			frequencyScale.addOption(new ResponseOption("Very Often"));
-			frequencyScale.addOption(new ResponseOption("Not Very Often"));
-			frequencyScale.addOption(new ResponseOption("Never"));
+			frequencyScale.addOption("Very Often");
+			frequencyScale.addOption("Not Very Often");
+			frequencyScale.addOption("Never");
+			
+			ResponseScale movies = new ResponseScale();
+			movies.addOption("Breakin' 2: Electric Boogaloo");
+			movies.addOption("Land Before Time VII");
+			movies.addOption("Catwoman");
+			movies.addOption("Gigli");
 				
 			sSurvey = new Survey();
-			sSurvey.addItem(new Item("The people I work with cooperate to get the job done.", agreeScale));
-			sSurvey.addItem(new Item("I like traffic lights.", agreeScale));
-			sSurvey.addItem(new Item("I eat yellow snow.", frequencyScale));
+			sSurvey.addItem("The people I work with cooperate to get the job done.", agreementScale);
+			sSurvey.addItem("I like traffic lights.", agreementScale);
+			sSurvey.addItem("I eat yellow snow.", frequencyScale);
+			sSurvey.addItem("The greatest movie ever is...", movies);
 		}					
 	}
 	
