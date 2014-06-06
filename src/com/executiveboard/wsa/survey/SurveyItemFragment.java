@@ -13,39 +13,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.executiveboard.wsa.survey.models.Item;
-import com.executiveboard.wsa.survey.models.ResponseOption;
-import com.executiveboard.wsa.survey.models.ResponseScale;
-import com.executiveboard.wsa.survey.models.Survey;
+import com.executiveboard.wsa.survey.models.PlaceholderData;
 
 public class SurveyItemFragment extends Fragment {
 	private static final String TAG = "SurveyItemFragment";
 	private static final String EXTRA_ITEM_ID = "com.executiveboard.wsa.survey.item_id";
 	private static final String DB_NAME = "survey.db3";
 	private SQLiteDatabase mDatabase;
-	
-	public static class PlaceholderData {
-		public static Survey survey;
-		public static void init() {
-			if (survey == null) {
-				ResponseScale agreeScale = new ResponseScale();		
-				agreeScale.addOption(new ResponseOption("Strongly Agree"));
-				agreeScale.addOption(new ResponseOption("Agree"));
-				agreeScale.addOption(new ResponseOption("Neither Agree Nor Disagree"));
-				agreeScale.addOption(new ResponseOption("Disagree"));
-				agreeScale.addOption(new ResponseOption("Strongly Disagree"));
-				
-				ResponseScale frequencyScale = new ResponseScale();
-				frequencyScale.addOption(new ResponseOption("Very Often"));
-				frequencyScale.addOption(new ResponseOption("Not very often"));
-				frequencyScale.addOption(new ResponseOption("Never"));
-				
-				survey = new Survey();
-				survey.addItem(new Item("The people I work with cooperate to get the job done.", agreeScale));
-				survey.addItem(new Item("I like traffic lights.", agreeScale));
-				survey.addItem(new Item("I eat yellow snow.", frequencyScale));
-			}					
-		}
-	}
 	
 	@Override
 	public void onResume() {
@@ -66,7 +40,7 @@ public class SurveyItemFragment extends Fragment {
 		Log.i(TAG, "onCreateView");
 		View view = inflater.inflate(R.layout.fragment_survey_item, parent, false);
 		PlaceholderData.init();
-		Item item = PlaceholderData.survey.getRandomItem();
+		Item item = PlaceholderData.getRandomItem();
 		
 		TextView itemTextView = (TextView)view.findViewById(R.id.surveyItemText);		
 		itemTextView.setText(item.getText());
