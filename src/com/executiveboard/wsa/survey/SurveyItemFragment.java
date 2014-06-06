@@ -25,15 +25,16 @@ public class SurveyItemFragment extends Fragment {
 	public static class PlaceholderData {
 		public static Item item;
 		public static void init() {
-			ResponseScale scale = new ResponseScale();		
-			scale.addOption(new ResponseOption("Strongly Agree"));
-			scale.addOption(new ResponseOption("Agree"));
-			scale.addOption(new ResponseOption("Neither Agree Nor Disagree"));
-			scale.addOption(new ResponseOption("Disagree"));
-			scale.addOption(new ResponseOption("Strongly Disagree"));
+			if (item == null) {
+				ResponseScale scale = new ResponseScale();		
+				scale.addOption(new ResponseOption("Strongly Agree"));
+				scale.addOption(new ResponseOption("Agree"));
+				scale.addOption(new ResponseOption("Neither Agree Nor Disagree"));
+				scale.addOption(new ResponseOption("Disagree"));
+				scale.addOption(new ResponseOption("Strongly Disagree"));
 		
-			item = new Item("The people I work with cooperate to get the job done.");
-			item.setResponseScale(scale);
+				item = new Item("The people I work with cooperate to get the job done.", scale);
+			}
 		}
 	}
 	
@@ -66,10 +67,10 @@ public class SurveyItemFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(getActivity(), "Pressed Submit", Toast.LENGTH_SHORT).show();
-			}			
+			}
 		});
 		
-		LinearLayout ll = (LinearLayout)view.findViewById(R.id.responseOptionsLayout);
+		LinearLayout layout = (LinearLayout)view.findViewById(R.id.responseOptionsLayout);
 		for (int i = 0; i < PlaceholderData.item.getOptionCount(); ++i) {
 			final String text = PlaceholderData.item.getOption(i).getText();
 			Button button = new Button(getActivity());
@@ -79,13 +80,14 @@ public class SurveyItemFragment extends Fragment {
 				public void onClick(View v) {
 					submitButton.setEnabled(true);
 					Toast.makeText(getActivity(), "Pressed " + text, Toast.LENGTH_SHORT).show();					
-				}				
+				}
 			});
-			ll.addView(button);
+			layout.addView(button);
 		}
 		
 		Button previousButton = (Button)view.findViewById(R.id.buttonPrevious);
-		previousButton.setEnabled(false);			
+		previousButton.setEnabled(false);
+		previousButton.setVisibility(View.INVISIBLE);
 		
 		return view;
 	}

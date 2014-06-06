@@ -18,6 +18,12 @@ public class Item {
 		mText = text;
 	}
 	
+	public Item(String text, ResponseScale scale) {
+		mId = UUID.randomUUID().toString();
+		mText = text;
+		mResponseScale = scale;
+	}
+	
 	public void setResponseScale(ResponseScale scale) {
 		mResponseScale = scale;
 	}
