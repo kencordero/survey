@@ -8,6 +8,11 @@ public class Item {
 	private String mText;
 	private ResponseScale mResponseScale;
 	
+	@Override
+	public String toString() {
+		return mText;
+	}
+	
 	public Item(String id, String text) {
 		mId = id;
 		mText = text;

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.executiveboard.wsa.survey.models.Item;
 import com.executiveboard.wsa.survey.models.ResponseOption;
 import com.executiveboard.wsa.survey.models.ResponseScale;
+import com.executiveboard.wsa.survey.models.Survey;
 
 public class SurveyItemFragment extends Fragment {
 	private static final String TAG = "SurveyItemFragment";
@@ -23,18 +24,26 @@ public class SurveyItemFragment extends Fragment {
 	private SQLiteDatabase mDatabase;
 	
 	public static class PlaceholderData {
-		public static Item item;
+		public static Survey survey;
 		public static void init() {
-			if (item == null) {
-				ResponseScale scale = new ResponseScale();		
-				scale.addOption(new ResponseOption("Strongly Agree"));
-				scale.addOption(new ResponseOption("Agree"));
-				scale.addOption(new ResponseOption("Neither Agree Nor Disagree"));
-				scale.addOption(new ResponseOption("Disagree"));
-				scale.addOption(new ResponseOption("Strongly Disagree"));
-		
-				item = new Item("The people I work with cooperate to get the job done.", scale);
-			}
+			if (survey == null) {
+				ResponseScale agreeScale = new ResponseScale();		
+				agreeScale.addOption(new ResponseOption("Strongly Agree"));
+				agreeScale.addOption(new ResponseOption("Agree"));
+				agreeScale.addOption(new ResponseOption("Neither Agree Nor Disagree"));
+				agreeScale.addOption(new ResponseOption("Disagree"));
+				agreeScale.addOption(new ResponseOption("Strongly Disagree"));
+				
+				ResponseScale frequencyScale = new ResponseScale();
+				frequencyScale.addOption(new ResponseOption("Very Often"));
+				frequencyScale.addOption(new ResponseOption("Not very often"));
+				frequencyScale.addOption(new ResponseOption("Never"));
+				
+				survey = new Survey();
+				survey.addItem(new Item("The people I work with cooperate to get the job done.", agreeScale));
+				survey.addItem(new Item("I like traffic lights.", agreeScale));
+				survey.addItem(new Item("I eat yellow snow.", frequencyScale));
+			}					
 		}
 	}
 	
@@ -57,9 +66,10 @@ public class SurveyItemFragment extends Fragment {
 		Log.i(TAG, "onCreateView");
 		View view = inflater.inflate(R.layout.fragment_survey_item, parent, false);
 		PlaceholderData.init();
+		Item item = PlaceholderData.survey.getRandomItem();
 		
 		TextView itemTextView = (TextView)view.findViewById(R.id.surveyItemText);		
-		itemTextView.setText(PlaceholderData.item.getText());
+		itemTextView.setText(item.getText());
 		
 		final Button submitButton = (Button)view.findViewById(R.id.buttonSubmit);
 		submitButton.setEnabled(false);
@@ -71,8 +81,8 @@ public class SurveyItemFragment extends Fragment {
 		});
 		
 		LinearLayout layout = (LinearLayout)view.findViewById(R.id.responseOptionsLayout);
-		for (int i = 0; i < PlaceholderData.item.getOptionCount(); ++i) {
-			final String text = PlaceholderData.item.getOption(i).getText();
+		for (int i = 0; i < item.getOptionCount(); ++i) {
+			final String text = item.getOption(i).getText();
 			Button button = new Button(getActivity());
 			button.setText(text);
 			button.setOnClickListener(new View.OnClickListener() {

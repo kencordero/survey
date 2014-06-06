@@ -16,6 +16,11 @@ public class ResponseOption {
 		mText = text;
 	}
 	
+	@Override
+	public String toString() {
+		return mText;
+	}
+	
 	public String getId() {
 		return mId;
 	}
