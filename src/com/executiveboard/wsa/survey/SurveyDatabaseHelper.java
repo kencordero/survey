@@ -5,14 +5,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.executiveboard.wsa.survey.models.Item;
+import com.executiveboard.wsa.survey.models.ResponseScale;
+
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class DatabaseOpenHelper extends SQLiteOpenHelper {
+public class SurveyDatabaseHelper extends SQLiteOpenHelper {
 	private static final String TAG = "DatabaseOpenHelper";
 	private static final int DB_VERSION = 1;	
 
@@ -30,7 +34,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	 * Takes and keeps a reference of the passed context in order to access to the application assets and resources.
 	 * @param context
 	 */
-	public DatabaseOpenHelper(Context context, String dbName) {		
+	public SurveyDatabaseHelper(Context context, String dbName) {		
 		super(context, dbName, null, DB_VERSION);
 		Log.i(TAG, "init");
 		mDbName = dbName;
@@ -142,8 +146,42 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 		Log.i(TAG, "onUpgrade");
 	}
 
-	// Add your public helper methods to access and get content from the database.
-	// You could return cursors by doing "return myDataBase.query(....)" so it'd be easy
-	// to create adapters for your views.
-
+	// public helper methods to access and get content from the database.
+	public Item getRandomItem() {
+		Cursor cursor = mDatabase.rawQuery("SELECT _id, text FROM items ORDER BY RANDOM()", null);
+		String itemText = null;
+		int itemId = -1;
+		if (cursor != null) {
+			try {
+				cursor.moveToFirst();
+				do {
+					itemText = cursor.getString(cursor.getColumnIndex("text"));
+					itemId = cursor.getInt(cursor.getColumnIndex("_id"));
+				} while (cursor.moveToNext());
+			} finally {
+				cursor.close();
+			}
+		}
+		Log.i(TAG, "Retrieved item #" + itemId + ": " + itemText);
+		return new Item(Integer.toString(itemId), itemText);
+	}
+	
+	public ResponseScale getItemResponseScale(Item item) {
+		Cursor cursor = mDatabase.rawQuery("SELECT ro.text FROM response_options ro " +
+			"JOIN response_scale_response_options rsro ON ro._id = rsro.response_option_id " +
+			"JOIN items i ON i.response_scale_id = rsro.response_scale_id " +
+			"WHERE i._id = ? ORDER BY rsro.sequence", new String[] {item.getId()});
+		ResponseScale scale = new ResponseScale();
+		if (cursor != null) {
+			try {
+				cursor.moveToFirst();
+				do {
+					scale.addOption(cursor.getString(cursor.getColumnIndex("text")));
+				} while (cursor.moveToNext());
+			} finally {
+				cursor.close();
+			}
+		}
+		return scale;
+	}
 }
