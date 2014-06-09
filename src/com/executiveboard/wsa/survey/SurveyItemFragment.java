@@ -1,5 +1,6 @@
 package com.executiveboard.wsa.survey;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,30 +13,46 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.executiveboard.wsa.survey.models.Item;
+import com.executiveboard.wsa.survey.models.Survey;
 
 public class SurveyItemFragment extends Fragment {
 	private static final String TAG = "SurveyItemFragment";
 	private static final String EXTRA_ITEM_ID = "com.executiveboard.wsa.survey.item_id";
-	private static final String DB_NAME = "survey.db3";
-	private SurveyDatabaseHelper mDbHelper;
 	private Button mSubmitButton;
+	private Item mItem;
+	private Callbacks mCallbacks;
+	
+	public interface Callbacks {
+		void onLoadItem(Item item);
+		void onSubmit();
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		Log.i(TAG, "onAttach");
+		mCallbacks = (Callbacks)activity;
+	}
+	
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		Log.i(TAG, "onDetach");
+		mCallbacks = null;
+	}
 	
 	@Override
 	public void onResume() {
 		super.onResume();
 		Log.i(TAG, "onResume");
-		mDbHelper = new SurveyDatabaseHelper(getActivity(), DB_NAME);
-		mDbHelper.openDatabase();
-		Item item = mDbHelper.getRandomItem();
-		item.setResponseScale(mDbHelper.getItemResponseScale(item));
-		
+				
 		TextView itemTextView = (TextView)getView().findViewById(R.id.surveyItemText);		
-		itemTextView.setText(item.getText());		
+		itemTextView.setText(mItem.getText());		
 		
 		LinearLayout layout = (LinearLayout)getView().findViewById(R.id.responseOptionsLayout);
 		layout.removeAllViews();
-		for (int i = 0; i < item.getOptionCount(); ++i) {
-			final String text = item.getOption(i).getText();
+		for (int i = 0; i < mItem.getOptionCount(); ++i) {
+			final String text = mItem.getOption(i).getText();
 			Button button = new Button(getActivity());
 			button.setText(text);
 			button.setOnClickListener(new View.OnClickListener() {
@@ -49,10 +66,12 @@ public class SurveyItemFragment extends Fragment {
 	}
 	
 	@Override
-	public void onPause() {
-		super.onPause();
-		Log.i(TAG, "onPause");
-		mDbHelper.close();
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Log.i(TAG, "onCreate");
+		String itemId = getArguments().getString(EXTRA_ITEM_ID);
+		mItem = Survey.get(getActivity()).getItem(itemId);
+		mCallbacks.onLoadItem(mItem);		
 	}
 	
 	@Override
@@ -64,7 +83,7 @@ public class SurveyItemFragment extends Fragment {
 		mSubmitButton.setEnabled(false);
 		mSubmitButton.setOnClickListener(new View.OnClickListener() {			
 			public void onClick(View v) {
-				Toast.makeText(getActivity(), "Pressed Submit", Toast.LENGTH_SHORT).show();
+				mCallbacks.onSubmit();
 			}
 		});
 		

@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.executiveboard.wsa.survey.models.Item;
-import com.executiveboard.wsa.survey.models.ResponseScale;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -15,6 +12,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.executiveboard.wsa.survey.models.Item;
+import com.executiveboard.wsa.survey.models.ResponseScale;
+import com.executiveboard.wsa.survey.models.Survey;
 
 public class SurveyDatabaseHelper extends SQLiteOpenHelper {
 	private static final String TAG = "DatabaseOpenHelper";
@@ -148,7 +149,7 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
 
 	// public helper methods to access and get content from the database.
 	public Item getRandomItem() {
-		Cursor cursor = mDatabase.rawQuery("SELECT _id, text FROM items ORDER BY RANDOM()", null);
+		Cursor cursor = mDatabase.rawQuery("SELECT _id, text FROM items ORDER BY RANDOM() LIMIT 1", null);
 		String itemText = null;
 		int itemId = -1;
 		if (cursor != null) {
@@ -183,5 +184,24 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
 			}
 		}
 		return scale;
+	}
+	
+	public Survey getSurvey() {
+		Cursor cursor = mDatabase.rawQuery("SELECT _id,  text FROM items ORDER BY RANDOM()", 
+				null);
+		Survey survey = Survey.get(mContext);
+		if (cursor != null) {
+			try {
+				cursor.moveToFirst();
+				do {
+					int id = cursor.getInt(cursor.getColumnIndex("_id"));
+					String text = cursor.getString(cursor.getColumnIndex("text"));
+					survey.addItem(new Item(Integer.toString(id), text));
+				} while (cursor.moveToNext());
+			} finally {
+				cursor.close();
+			}
+		}		
+		return survey;
 	}
 }

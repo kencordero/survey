@@ -2,14 +2,22 @@ package com.executiveboard.wsa.survey.models;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.UUID;
+
+import android.content.Context;
 
 public class Survey {
 	private ArrayList<Item> mItems;
-	private String mId;
+	private static Survey sSurvey;
+	private Context mAppContext;
+		
+	public static Survey get(Context c) {
+		if (sSurvey == null)
+			sSurvey = new Survey(c.getApplicationContext());
+		return sSurvey;
+	}
 	
-	public Survey() {
-		mId = UUID.randomUUID().toString();
+	private Survey(Context appContext) {
+		mAppContext = appContext;
 		mItems = new ArrayList<Item>();
 	}
 	
