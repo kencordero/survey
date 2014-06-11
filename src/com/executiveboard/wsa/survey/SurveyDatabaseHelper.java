@@ -18,7 +18,7 @@ import com.executiveboard.wsa.survey.models.ResponseScale;
 import com.executiveboard.wsa.survey.models.Survey;
 
 public class SurveyDatabaseHelper extends SQLiteOpenHelper {
-	private static final String TAG = "DatabaseOpenHelper";
+	private static final String TAG = "SurveyDatabaseHelper";
 	private static final int DB_VERSION = 1;	
 
 	private SQLiteDatabase mDatabase;
@@ -155,10 +155,8 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
 		if (cursor != null) {
 			try {
 				cursor.moveToFirst();
-				do {
-					itemText = cursor.getString(cursor.getColumnIndex("text"));
-					itemId = cursor.getInt(cursor.getColumnIndex("_id"));
-				} while (cursor.moveToNext());
+				itemText = cursor.getString(cursor.getColumnIndex("text"));
+				itemId = cursor.getInt(cursor.getColumnIndex("_id"));				
 			} finally {
 				cursor.close();
 			}
@@ -187,16 +185,18 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	public Survey getSurvey() {
+		Survey survey = Survey.get(mContext);
+		if (survey.getItemCount() > 0) // survey already populated
+			return survey;
 		Cursor cursor = mDatabase.rawQuery("SELECT _id,  text FROM items ORDER BY RANDOM()", 
 				null);
-		Survey survey = Survey.get(mContext);
 		if (cursor != null) {
 			try {
 				cursor.moveToFirst();
 				do {
-					int id = cursor.getInt(cursor.getColumnIndex("_id"));
-					String text = cursor.getString(cursor.getColumnIndex("text"));
-					survey.addItem(new Item(Integer.toString(id), text));
+					int itemId = cursor.getInt(cursor.getColumnIndex("_id"));
+					String itemText = cursor.getString(cursor.getColumnIndex("text"));
+					survey.addItem(new Item(Integer.toString(itemId), itemText));
 				} while (cursor.moveToNext());
 			} finally {
 				cursor.close();

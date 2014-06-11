@@ -18,13 +18,18 @@ import com.executiveboard.wsa.survey.models.Survey;
 public class SurveyItemFragment extends Fragment {
 	private static final String TAG = "SurveyItemFragment";
 	private static final String EXTRA_ITEM_ID = "com.executiveboard.wsa.survey.item_id";
+	private static final String EXTRA_IS_FIRST = "com.executiveboard.wsa.survey.is_first";
+	private static final String EXTRA_IS_LAST = "com.executiveboard.wsa.survey.is_last";
 	private Button mSubmitButton;
 	private Item mItem;
 	private Callbacks mCallbacks;
+	private boolean mIsFirst;
+	private boolean mIsLast;
 	
 	public interface Callbacks {
 		void onLoadItem(Item item);
 		void onSubmit();
+		void onPrevious();
 	}
 	
 	@Override
@@ -69,7 +74,10 @@ public class SurveyItemFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.i(TAG, "onCreate");
+		
 		String itemId = getArguments().getString(EXTRA_ITEM_ID);
+		mIsFirst = getArguments().getBoolean(EXTRA_IS_FIRST);
+		mIsLast = getArguments().getBoolean(EXTRA_IS_LAST);
 		mItem = Survey.get(getActivity()).getItem(itemId);
 		mCallbacks.onLoadItem(mItem);		
 	}
@@ -81,23 +89,37 @@ public class SurveyItemFragment extends Fragment {
 		
 		mSubmitButton = (Button)view.findViewById(R.id.buttonSubmit);
 		mSubmitButton.setEnabled(false);
+		if (mIsLast)
+			mSubmitButton.setText(R.string.submit);
 		mSubmitButton.setOnClickListener(new View.OnClickListener() {			
 			public void onClick(View v) {
-				mCallbacks.onSubmit();
+				if (!mIsLast)
+					mCallbacks.onSubmit();
 			}
 		});
 		
 		Button previousButton = (Button)view.findViewById(R.id.buttonPrevious);
-		previousButton.setEnabled(false);
-		previousButton.setVisibility(View.INVISIBLE);
+		if (mIsFirst) {			
+			previousButton.setEnabled(false);
+			previousButton.setVisibility(View.INVISIBLE);
+		} else {
+			previousButton.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					mCallbacks.onPrevious();
+				}
+				
+			});
+		}
 		
 		return view;
 	}
 	
-	public static SurveyItemFragment newInstance(String itemId) {
+	public static SurveyItemFragment newInstance(String itemId, boolean isFirst, boolean isLast) {
 		Log.i(TAG, "newInstance");
 		Bundle bundle = new Bundle();
 		bundle.putSerializable(EXTRA_ITEM_ID, itemId);
+		bundle.putBoolean(EXTRA_IS_FIRST, isFirst);
+		bundle.putBoolean(EXTRA_IS_LAST, isLast);
 		
 		SurveyItemFragment fragment = new SurveyItemFragment();
 		fragment.setArguments(bundle);

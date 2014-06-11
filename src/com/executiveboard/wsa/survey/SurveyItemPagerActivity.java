@@ -1,13 +1,13 @@
 package com.executiveboard.wsa.survey;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
-
 import com.executiveboard.wsa.survey.models.Item;
 import com.executiveboard.wsa.survey.models.Survey;
 
@@ -20,6 +20,7 @@ public class SurveyItemPagerActivity extends FragmentActivity implements SurveyI
 	private Survey mSurvey;
 	private int mIdx;
 	
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -32,12 +33,16 @@ public class SurveyItemPagerActivity extends FragmentActivity implements SurveyI
 		mHelper.openDatabase();
 		
 		mSurvey = mHelper.getSurvey();
+		setTitle();
+				
 		FragmentManager fm = getSupportFragmentManager();
 		mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
-			public Fragment getItem(int idx) {
+			public Fragment getItem(int idx) {				
+				boolean isFirst = (idx == 0);
+				boolean isLast = (idx == getCount() - 1);				
 				String itemId = mSurvey.getItem(idx).getId();
-				mIdx = idx;
-				return SurveyItemFragment.newInstance(itemId);
+				Log.i(TAG, "Load item #" + idx);
+				return SurveyItemFragment.newInstance(itemId, isFirst, isLast);
 			}
 
 			public int getCount() {
@@ -46,6 +51,12 @@ public class SurveyItemPagerActivity extends FragmentActivity implements SurveyI
 		});
 	}
 	
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void setTitle() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+			getActionBar().setTitle((mIdx+1) + " of " + mSurvey.getItemCount());
+	}
+
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -53,6 +64,8 @@ public class SurveyItemPagerActivity extends FragmentActivity implements SurveyI
 		mHelper.close();
 	}
 
+	// Fragment callback interface methods
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	public void onLoadItem(Item item) {
 		item.setResponseScale(mHelper.getItemResponseScale(item));		
@@ -60,6 +73,13 @@ public class SurveyItemPagerActivity extends FragmentActivity implements SurveyI
 
 	@Override
 	public void onSubmit() {
-		mViewPager.setCurrentItem(mIdx++, true);		
+		mViewPager.setCurrentItem(++mIdx, true);
+		setTitle();
+	}
+
+	@Override
+	public void onPrevious() {
+		mViewPager.setCurrentItem(--mIdx, true);
+		setTitle();
 	}
 }
