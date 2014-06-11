@@ -1,10 +1,5 @@
 package com.executiveboard.wsa.survey;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -16,6 +11,11 @@ import android.util.Log;
 import com.executiveboard.wsa.survey.models.Item;
 import com.executiveboard.wsa.survey.models.ResponseScale;
 import com.executiveboard.wsa.survey.models.Survey;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class SurveyDatabaseHelper extends SQLiteOpenHelper {
 	private static final String TAG = "SurveyDatabaseHelper";
@@ -123,7 +123,7 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
 		//Open the database	      
 		if (mDatabase == null) {
 			createDatabase();
-			mDatabase = SQLiteDatabase.openDatabase(getPath(), null,  SQLiteDatabase.OPEN_READONLY);
+			mDatabase = SQLiteDatabase.openDatabase(getPath(), null, SQLiteDatabase.OPEN_READONLY);
 		}
 		return mDatabase;
 	}

@@ -64,6 +64,13 @@ public class SurveyItemPagerActivity extends FragmentActivity implements SurveyI
 		mHelper.close();
 	}
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume");
+        mHelper.getDb();
+    }
+
 	// Fragment callback interface methods
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
