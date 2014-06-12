@@ -17,7 +17,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 
 public class SurveyDatabaseHelper extends SQLiteOpenHelper {
 	private static final String TAG = "SurveyDatabaseHelper";
@@ -35,7 +34,8 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
 	/**
 	 * Constructor
 	 * Takes and keeps a reference of the passed context in order to access to the application assets and resources.
-	 * @param context
+	 * @param context activity or application context
+     * @param dbName filename for database
 	 */
 	public SurveyDatabaseHelper(Context context, String dbName) {		
 		super(context, dbName, null, DB_VERSION);
@@ -150,23 +150,6 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	// public helper methods to access and get content from the database.
-	public Item getRandomItem() {
-		Cursor cursor = mDatabase.rawQuery("SELECT _id, text FROM items ORDER BY RANDOM() LIMIT 1", null);
-		String itemText = null;
-		int itemId = -1;
-		if (cursor != null) {
-			try {
-				cursor.moveToFirst();
-				itemText = cursor.getString(cursor.getColumnIndex("text"));
-				itemId = cursor.getInt(cursor.getColumnIndex("_id"));				
-			} finally {
-				cursor.close();
-			}
-		}
-		Log.i(TAG, "Retrieved item #" + itemId + ": " + itemText);
-		return new Item(Integer.toString(itemId), itemText);
-	}
-	
 	public ResponseScale getItemResponseScale(Item item) {
 		Cursor cursor = mDatabase.rawQuery("SELECT ro._id, ro.text FROM response_options ro " +
 			"JOIN response_scale_response_options rsro ON ro._id = rsro.response_option_id " +
@@ -211,9 +194,7 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
 
     public void setSession() {
         ContentValues cv = new ContentValues();
-        ArrayList<Item> items = Survey.get(mContext).getItems();
-        for (int i = 0; i < items.size(); ++i) {
-            Item item = items.get(i);
+        for (Item item : Survey.get(mContext).getItems()) {
             cv.put("item_id", item.getId());
             cv.put("response_option_id", item.getResponse().getId());
             getWritableDatabase().insert("session_responses", null, cv);
