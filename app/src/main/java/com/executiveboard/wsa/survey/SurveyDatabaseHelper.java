@@ -20,7 +20,14 @@ import java.io.OutputStream;
 
 public class SurveyDatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "SurveyDatabaseHelper";
-    private static final int DB_VERSION = 1;    
+    private static final int DB_VERSION = 1;
+
+    private static final String TABLE_NAME_SESSION_RESPONSES = "session_responses";
+
+    private static final String COLUMN_NAME_ID = "_id";
+    private static final String COLUMN_NAME_TEXT = "text";
+    private static final String COLUMN_NAME_ITEM_ID = "item_id";
+    private static final String COLUMN_NAME_RESPONSE_OPTION_ID = "response_option_id";
 
     private SQLiteDatabase mDatabase;
     private final Context mContext;
@@ -160,8 +167,8 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
             try {
                 cursor.moveToFirst();
                 do {
-                    int optionId = cursor.getInt(cursor.getColumnIndex("_id"));
-                    String optionText = cursor.getString(cursor.getColumnIndex("text"));
+                    int optionId = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_ID));
+                    String optionText = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_TEXT));
                     scale.addOption(Integer.toString(optionId), optionText);
                 } while (cursor.moveToNext());
             } finally {
@@ -181,8 +188,8 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
             try {
                 cursor.moveToFirst();
                 do {
-                    int itemId = cursor.getInt(cursor.getColumnIndex("_id"));
-                    String itemText = cursor.getString(cursor.getColumnIndex("text"));
+                    int itemId = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_ID));
+                    String itemText = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_TEXT));
                     survey.addItem(Integer.toString(itemId), itemText);
                 } while (cursor.moveToNext());
             } finally {
@@ -195,9 +202,9 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
     public void setSession() {
         ContentValues cv = new ContentValues();
         for (Item item : Survey.get(mContext).getItems()) {
-            cv.put("item_id", item.getId());
-            cv.put("response_option_id", item.getResponse().getId());
-            getWritableDatabase().insert("session_responses", null, cv);
+            cv.put(COLUMN_NAME_ITEM_ID, item.getId());
+            cv.put(COLUMN_NAME_RESPONSE_OPTION_ID, item.getResponse().getId());
+            getWritableDatabase().insert(TABLE_NAME_SESSION_RESPONSES, null, cv);
         }
     }
 }
