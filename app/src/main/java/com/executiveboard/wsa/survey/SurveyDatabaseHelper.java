@@ -196,7 +196,7 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
 				do {
 					int itemId = cursor.getInt(cursor.getColumnIndex("_id"));
 					String itemText = cursor.getString(cursor.getColumnIndex("text"));
-					survey.addItem(new Item(Integer.toString(itemId), itemText));
+					survey.addItem(Integer.toString(itemId), itemText);
 				} while (cursor.moveToNext());
 			} finally {
 				cursor.close();

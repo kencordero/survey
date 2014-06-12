@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class ResponseScale {
-	private String mId;
+	private final String mId;
 	private ArrayList<ResponseOption> mResponseOptions;
 	
 	public ResponseScale(String id, ArrayList<ResponseOption> responseOptions) {
@@ -13,8 +13,7 @@ public class ResponseScale {
 	}
 	
 	public ResponseScale() {
-		mId = UUID.randomUUID().toString();
-		mResponseOptions = new ArrayList<ResponseOption>();
+        this(UUID.randomUUID().toString(), new ArrayList<ResponseOption>());
 	}
 	
 	public void addOption(ResponseOption option) {

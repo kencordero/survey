@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class Item {
-	private String mId;
-	private String mText;
+	private final String mId;
+	private final String mText;
 	private ResponseScale mResponseScale;
 	
 	@Override
@@ -19,8 +19,7 @@ public class Item {
 	}
 	
 	public Item(String text) {
-		mId = UUID.randomUUID().toString();
-		mText = text;
+        this(UUID.randomUUID().toString(), text);
 	}
 	
 	public Item(String text, ResponseScale scale) {

@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:text="@string/sample_question"
         android:textSize="@dimen/itemText_size"/>
     <RadioGroup

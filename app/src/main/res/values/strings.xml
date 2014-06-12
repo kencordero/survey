@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">CEB Survey</string>
+    <string name="sample_question">The people I work with cooperate to get the job done.</string>
+    <string name="submit">Submit</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="take_survey">Take Survey</string>
+    <string name="reporting">See Results</string>
+
+</resources>
