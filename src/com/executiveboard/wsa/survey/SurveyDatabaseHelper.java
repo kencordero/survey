@@ -188,7 +188,7 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
 		Survey survey = Survey.get(mContext);
 		if (survey.getItemCount() > 0) // survey already populated
 			return survey;
-		Cursor cursor = mDatabase.rawQuery("SELECT _id,  text FROM items ORDER BY RANDOM()", 
+		Cursor cursor = mDatabase.rawQuery("SELECT _id, text FROM items ORDER BY RANDOM()",
 				null);
 		if (cursor != null) {
 			try {

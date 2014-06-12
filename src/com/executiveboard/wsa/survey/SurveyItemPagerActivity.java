@@ -72,7 +72,6 @@ public class SurveyItemPagerActivity extends FragmentActivity implements SurveyI
     }
 
 	// Fragment callback interface methods
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	public void onLoadItem(Item item) {
 		item.setResponseScale(mHelper.getItemResponseScale(item));		

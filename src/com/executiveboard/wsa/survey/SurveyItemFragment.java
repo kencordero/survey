@@ -8,9 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.executiveboard.wsa.survey.models.Item;
 import com.executiveboard.wsa.survey.models.Survey;
@@ -54,16 +54,15 @@ public class SurveyItemFragment extends Fragment {
 		TextView itemTextView = (TextView)getView().findViewById(R.id.surveyItemText);		
 		itemTextView.setText(mItem.getText());		
 		
-		LinearLayout layout = (LinearLayout)getView().findViewById(R.id.responseOptionsLayout);
+		RadioGroup layout = (RadioGroup)getView().findViewById(R.id.responseOptionsRadioGroup);
 		layout.removeAllViews();
 		for (int i = 0; i < mItem.getOptionCount(); ++i) {
 			final String text = mItem.getOption(i).getText();
-			Button button = new Button(getActivity());
+			RadioButton button = new RadioButton(getActivity());
 			button.setText(text);
 			button.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					mSubmitButton.setEnabled(true);
-					Toast.makeText(getActivity(), "Pressed " + text, Toast.LENGTH_SHORT).show();					
 				}
 			});
 			layout.addView(button);
