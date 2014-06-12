@@ -1,5 +1,6 @@
 package com.executiveboard.wsa.survey;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -16,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 public class SurveyDatabaseHelper extends SQLiteOpenHelper {
 	private static final String TAG = "SurveyDatabaseHelper";
@@ -166,7 +168,7 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	public ResponseScale getItemResponseScale(Item item) {
-		Cursor cursor = mDatabase.rawQuery("SELECT ro.text FROM response_options ro " +
+		Cursor cursor = mDatabase.rawQuery("SELECT ro._id, ro.text FROM response_options ro " +
 			"JOIN response_scale_response_options rsro ON ro._id = rsro.response_option_id " +
 			"JOIN items i ON i.response_scale_id = rsro.response_scale_id " +
 			"WHERE i._id = ? ORDER BY rsro.sequence", new String[] {item.getId()});
@@ -175,7 +177,9 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
 			try {
 				cursor.moveToFirst();
 				do {
-					scale.addOption(cursor.getString(cursor.getColumnIndex("text")));
+                    int optionId = cursor.getInt(cursor.getColumnIndex("_id"));
+                    String optionText = cursor.getString(cursor.getColumnIndex("text"));
+					scale.addOption(Integer.toString(optionId), optionText);
 				} while (cursor.moveToNext());
 			} finally {
 				cursor.close();
@@ -204,4 +208,15 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
 		}		
 		return survey;
 	}
+
+    public void setSession() {
+        ContentValues cv = new ContentValues();
+        ArrayList<Item> items = Survey.get(mContext).getItems();
+        for (int i = 0; i < items.size(); ++i) {
+            Item item = items.get(i);
+            cv.put("item_id", item.getId());
+            cv.put("response_option_id", item.getResponse().getId());
+            getWritableDatabase().insert("session_responses", null, cv);
+        }
+    }
 }

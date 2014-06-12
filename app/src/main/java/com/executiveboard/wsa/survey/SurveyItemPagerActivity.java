@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.executiveboard.wsa.survey.models.Item;
 import com.executiveboard.wsa.survey.models.Survey;
 
@@ -77,8 +79,14 @@ public class SurveyItemPagerActivity extends FragmentActivity implements SurveyI
 		item.setResponseScale(mHelper.getItemResponseScale(item));		
 	}
 
-	@Override
-	public void onSubmit() {
+    @Override
+    public void onSubmit() {
+        mHelper.setSession();
+        Toast.makeText(this, "Survey results submitted", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+	public void onNext() {
 		mViewPager.setCurrentItem(++mIdx, true);
 		setTitle();
 	}
@@ -88,4 +96,6 @@ public class SurveyItemPagerActivity extends FragmentActivity implements SurveyI
 		mViewPager.setCurrentItem(--mIdx, true);
 		setTitle();
 	}
+
+
 }

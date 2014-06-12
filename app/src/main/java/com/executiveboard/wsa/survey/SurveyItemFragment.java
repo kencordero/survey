@@ -13,6 +13,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.executiveboard.wsa.survey.models.Item;
+import com.executiveboard.wsa.survey.models.ResponseOption;
 import com.executiveboard.wsa.survey.models.Survey;
 
 public class SurveyItemFragment extends Fragment {
@@ -30,7 +31,8 @@ public class SurveyItemFragment extends Fragment {
 		void onLoadItem(Item item);
 		void onSubmit();
 		void onPrevious();
-	}
+        void onNext();
+    }
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -57,16 +59,28 @@ public class SurveyItemFragment extends Fragment {
 		RadioGroup layout = (RadioGroup)getView().findViewById(R.id.responseOptionsRadioGroup);
 		layout.removeAllViews();
 		for (int i = 0; i < mItem.getOptionCount(); ++i) {
-			final String text = mItem.getOption(i).getText();
+            ResponseOption option = mItem.getOption(i);
 			RadioButton button = new RadioButton(getActivity());
-			button.setText(text);
+            button.setTag(option);
+			button.setText(option.getText());
 			button.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
-					mSubmitButton.setEnabled(true);
+					mItem.setResponse((ResponseOption)v.getTag());
+                    mSubmitButton.setEnabled(true);
 				}
 			});
 			layout.addView(button);
 		}
+
+        if (mItem.getResponse() != null) {
+            for (int i = 0; i < layout.getChildCount(); ++i) {
+                View v = layout.getChildAt(i);
+                if (v.getTag().equals(mItem.getResponse())) {
+                    v.performClick();
+                    break;
+                }
+            }
+        }
 	}
 	
 	@Override
@@ -92,8 +106,12 @@ public class SurveyItemFragment extends Fragment {
 			mSubmitButton.setText(R.string.submit);
 		mSubmitButton.setOnClickListener(new View.OnClickListener() {			
 			public void onClick(View v) {
-				if (!mIsLast)
-					mCallbacks.onSubmit();
+				if (mIsLast) {
+                    mCallbacks.onSubmit();
+                    mSubmitButton.setEnabled(false);
+                }
+                else
+                    mCallbacks.onNext();
 			}
 		});
 		

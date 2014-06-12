@@ -21,21 +21,9 @@ public class Survey {
 		mItems = new ArrayList<Item>();
 	}
 	
-	public void addItem(Item i) {
-		mItems.add(i);
-	}
-	
-	public void addItem(String itemText, ResponseScale scale) {
-		addItem(new Item(itemText, scale));		
-	}
-
-    public void addItem(String itemId, String itemText) {
+	public void addItem(String itemId, String itemText) {
         mItems.add(new Item(itemId, itemText));
     }
-	
-	public void deleteItem(Item i) {
-		mItems.remove(i);
-	}
 	
 	public ArrayList<Item> getItems() {
 		return mItems;
@@ -57,8 +45,4 @@ public class Survey {
 		return mItems.get(idx);
 	}
 
-	public Item getRandomItem() {
-		Random random = new Random();
-		return getItem(random.nextInt(getItemCount()));		
-	}
 }

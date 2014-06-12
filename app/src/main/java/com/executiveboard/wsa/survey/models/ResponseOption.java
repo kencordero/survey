@@ -1,7 +1,5 @@
 package com.executiveboard.wsa.survey.models;
 
-import java.util.UUID;
-
 public class ResponseOption {
 	private final String mId;
 	private final String mText;
@@ -11,10 +9,16 @@ public class ResponseOption {
 		mText = text;
 	}
 	
-	public ResponseOption(String text) {
-        this(UUID.randomUUID().toString(), text);
-	}
-	
+	@Override
+    public boolean equals(Object that) {
+        if (that == null) return false;
+        if (this == that) return true;
+        if (!(that instanceof ResponseOption)) return false;
+        ResponseOption otherOption = (ResponseOption)that;
+        if (this.mId == otherOption.getId()) return true;
+        return false;
+    }
+
 	@Override
 	public String toString() {
 		return mText;

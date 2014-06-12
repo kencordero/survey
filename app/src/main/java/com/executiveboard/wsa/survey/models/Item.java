@@ -1,11 +1,11 @@
 package com.executiveboard.wsa.survey.models;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class Item {
 	private final String mId;
 	private final String mText;
+    private ResponseOption mResponse;
 	private ResponseScale mResponseScale;
 	
 	@Override
@@ -18,19 +18,17 @@ public class Item {
 		mText = text;
 	}
 	
-	public Item(String text) {
-        this(UUID.randomUUID().toString(), text);
-	}
-	
-	public Item(String text, ResponseScale scale) {
-		mId = UUID.randomUUID().toString();
-		mText = text;
-		mResponseScale = scale;
-	}
-	
 	public void setResponseScale(ResponseScale scale) {
 		mResponseScale = scale;
 	}
+
+    public void setResponse(ResponseOption response) {
+        mResponse = response;
+    }
+
+    public ResponseOption getResponse() {
+        return mResponse;
+    }
 	
 	public ArrayList<ResponseOption> getOptions() {
 		return mResponseScale.getResponseOptions();
