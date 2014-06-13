@@ -27,4 +27,10 @@ public class ReportActivity extends SingleFragmentActivity implements ReportFrag
         item.setResponseScale(mHelper.getOptionStats(item));
         return item;
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mHelper.close();
+    }
 }
