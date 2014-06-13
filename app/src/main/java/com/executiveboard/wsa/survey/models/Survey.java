@@ -43,5 +43,4 @@ public class Survey {
     public Item getItem(int idx) {
         return mItems.get(idx);
     }
-
 }

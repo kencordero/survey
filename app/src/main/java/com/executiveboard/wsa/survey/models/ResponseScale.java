@@ -28,4 +28,12 @@ public class ResponseScale {
     public ResponseOption getOption(int idx) {
         return mResponseOptions.get(idx);
     }
+
+    public ResponseOption getOption(String id) {
+        for (ResponseOption option: mResponseOptions) {
+            if (option.getId().equals(id))
+                return option;
+        }
+        return null;
+    }
 }

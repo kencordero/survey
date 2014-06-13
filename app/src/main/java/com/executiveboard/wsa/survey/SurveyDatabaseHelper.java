@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.executiveboard.wsa.survey.models.Item;
+import com.executiveboard.wsa.survey.models.ResponseOption;
 import com.executiveboard.wsa.survey.models.ResponseScale;
 import com.executiveboard.wsa.survey.models.Survey;
 
@@ -200,11 +201,48 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void setSession() {
-        ContentValues cv = new ContentValues();
+        ContentValues values = new ContentValues();
         for (Item item : Survey.get(mContext).getItems()) {
-            cv.put(COLUMN_NAME_ITEM_ID, item.getId());
-            cv.put(COLUMN_NAME_RESPONSE_OPTION_ID, item.getResponse().getId());
-            getWritableDatabase().insert(TABLE_NAME_SESSION_RESPONSES, null, cv);
+            values.put(COLUMN_NAME_ITEM_ID, item.getId());
+            values.put(COLUMN_NAME_RESPONSE_OPTION_ID, item.getResponse().getId());
+            getWritableDatabase().insert(TABLE_NAME_SESSION_RESPONSES, null, values);
         }
+    }
+
+    public ResponseScale getOptionStats(Item item) {
+        ResponseScale scale = getItemResponseScale(item);
+        Cursor cursor = mDatabase.rawQuery("SELECT response_option_id, COUNT(*) as n " +
+                "FROM session_responses WHERE item_id = ? GROUP BY response_option_id",
+                new String[] {item.getId()});
+        if (cursor != null) {
+            try {
+                cursor.moveToFirst();
+                do {
+                    int optionId = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_RESPONSE_OPTION_ID));
+                    int optionCount = cursor.getInt(cursor.getColumnIndex("n"));
+                    scale.getOption(Integer.toString(optionId)).setCount(optionCount);
+                } while (cursor.moveToNext());
+            } finally {
+                cursor.close();
+            }
+        }
+        return scale;
+    }
+
+    public Item getRandomItem() {
+        Cursor cursor = mDatabase.rawQuery("SELECT _id, text FROM items ORDER BY RANDOM() LIMIT 1", null);
+        String itemText = null;
+        int itemId = -1;
+        if (cursor != null) {
+            try {
+                cursor.moveToFirst();
+                itemText = cursor.getString(cursor.getColumnIndex("text"));
+                itemId = cursor.getInt(cursor.getColumnIndex("_id"));
+            } finally {
+                cursor.close();
+            }
+        }
+        Log.i(TAG, "Retrieved item #" + itemId + ": " + itemText);
+        return new Item(Integer.toString(itemId), itemText);
     }
 }
