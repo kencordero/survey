@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.executiveboard.wsa.survey.models.Item;
 import com.executiveboard.wsa.survey.models.ResponseOption;
-import com.executiveboard.wsa.survey.models.Survey;
 
 /**
  * Created by kcordero on 6/12/2014.

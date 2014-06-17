@@ -10,7 +10,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.executiveboard.wsa.survey.models.Item;
-import com.executiveboard.wsa.survey.models.ResponseOption;
 import com.executiveboard.wsa.survey.models.ResponseScale;
 import com.executiveboard.wsa.survey.models.Survey;
 
@@ -183,7 +182,7 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
         Survey survey = Survey.get(mContext);
         if (survey.getItemCount() > 0) // survey already populated
             return survey;
-        Cursor cursor = mDatabase.rawQuery("SELECT _id, text FROM items ORDER BY RANDOM()",
+        Cursor cursor = mDatabase.rawQuery("SELECT _id, text FROM items ORDER BY RANDOM() LIMIT 5",
                 null);
         if (cursor != null) {
             try {

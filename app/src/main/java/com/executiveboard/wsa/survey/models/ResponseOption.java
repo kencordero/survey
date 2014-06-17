@@ -16,9 +16,7 @@ public class ResponseOption {
         if (that == null) return false;
         if (this == that) return true;
         if (!(that instanceof ResponseOption)) return false;
-        ResponseOption otherOption = (ResponseOption)that;
-        if (this.mId == otherOption.getId()) return true;
-        return false;
+        return this.mId.equals(((ResponseOption)that).getId());
     }
 
     public void setCount(int count) {

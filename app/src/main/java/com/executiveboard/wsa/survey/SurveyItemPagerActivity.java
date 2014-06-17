@@ -21,8 +21,7 @@ public class SurveyItemPagerActivity extends FragmentActivity implements SurveyI
     private SurveyDatabaseHelper mHelper;
     private Survey mSurvey;
     private int mIdx;
-    
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +82,7 @@ public class SurveyItemPagerActivity extends FragmentActivity implements SurveyI
     public void onSubmit() {
         mHelper.setSession();
         Toast.makeText(this, "Survey results submitted", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     @Override

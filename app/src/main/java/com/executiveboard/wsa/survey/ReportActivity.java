@@ -1,10 +1,8 @@
 package com.executiveboard.wsa.survey;
 
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.executiveboard.wsa.survey.models.Item;
-import com.executiveboard.wsa.survey.models.Survey;
 
 /**
  * Created by kcordero on 6/12/2014.
