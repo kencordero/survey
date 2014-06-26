@@ -20,7 +20,7 @@ public class Survey {
         mItems = new ArrayList<Item>();
     }
     
-    public void addItem(String itemId, String itemText) {
+    public void addItem(int itemId, String itemText) {
         mItems.add(new Item(itemId, itemText));
     }
     
@@ -32,15 +32,11 @@ public class Survey {
         return mItems.size();
     }
     
-    public Item getItem(String id) {
+    public Item getItem(int id) {
         for (Item item: mItems) {
-            if (item.getId().equals(id))
+            if (id == item.getId())
                 return item;
         }
         return null;
-    }
-    
-    public Item getItem(int idx) {
-        return mItems.get(idx);
     }
 }

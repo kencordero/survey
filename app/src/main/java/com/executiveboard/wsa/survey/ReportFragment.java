@@ -65,7 +65,7 @@ public class ReportFragment extends Fragment {
         LinearLayout statLayout = (LinearLayout)getView().findViewById(R.id.layout_options_stats);
 
         for (int i = 0; i < mItem.getOptionCount(); ++i) {
-            ResponseOption option = mItem.getOption(i);
+            ResponseOption option = mItem.getOptions().get(i);
             TextView textView = new TextView(getActivity());
             TextView statView = new TextView(getActivity());
             textView.setText(option.getText());

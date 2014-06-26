@@ -3,7 +3,7 @@ package com.executiveboard.wsa.survey.models;
 import java.util.ArrayList;
 
 public class Item {
-    private final String mId;
+    private final int mId;
     private final String mText;
     private ResponseOption mResponse;
     private ResponseScale mResponseScale;
@@ -13,7 +13,7 @@ public class Item {
         return mText;
     }
     
-    public Item(String id, String text) {
+    public Item(int id, String text) {
         mId = id;
         mText = text;
     }
@@ -42,7 +42,7 @@ public class Item {
         return mResponseScale.getOption(idx);
     }
     
-    public String getId() {
+    public int getId() {
         return mId;
     }
     

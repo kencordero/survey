@@ -1,11 +1,11 @@
 package com.executiveboard.wsa.survey.models;
 
 public class ResponseOption {
-    private final String mId;
+    private final int mId;
     private final String mText;
     private int mCount;
     
-    public ResponseOption(String id, String text) {
+    public ResponseOption(int id, String text) {
         mId = id;
         mText = text;
         mCount = 0;
@@ -16,7 +16,7 @@ public class ResponseOption {
         if (that == null) return false;
         if (this == that) return true;
         if (!(that instanceof ResponseOption)) return false;
-        return this.mId.equals(((ResponseOption)that).getId());
+        return mId == ((ResponseOption)that).getId();
     }
 
     public void setCount(int count) {
@@ -32,7 +32,7 @@ public class ResponseOption {
         return mText;
     }
     
-    public String getId() {
+    public int getId() {
         return mId;
     }
     

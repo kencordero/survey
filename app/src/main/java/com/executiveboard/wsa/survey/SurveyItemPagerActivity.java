@@ -41,7 +41,7 @@ public class SurveyItemPagerActivity extends FragmentActivity implements SurveyI
             public Fragment getItem(int idx) {                
                 boolean isFirst = (idx == 0);
                 boolean isLast = (idx == getCount() - 1);                
-                String itemId = mSurvey.getItem(idx).getId();
+                int itemId = mSurvey.getItems().get(idx).getId();
                 Log.i(TAG, "Load item #" + idx);
                 return SurveyItemFragment.newInstance(itemId, isFirst, isLast);
             }

@@ -13,7 +13,7 @@ public class ResponseScale {
         mResponseOptions.add(option);
     }
 
-    public void addOption(String optionId, String optionText) {
+    public void addOption(int optionId, String optionText) {
         addOption(new ResponseOption(optionId, optionText));
     }
 
@@ -25,13 +25,9 @@ public class ResponseScale {
         return mResponseOptions.size();
     }
 
-    public ResponseOption getOption(int idx) {
-        return mResponseOptions.get(idx);
-    }
-
-    public ResponseOption getOption(String id) {
+    public ResponseOption getOption(int id) {
         for (ResponseOption option: mResponseOptions) {
-            if (option.getId().equals(id))
+            if (id == option.getId())
                 return option;
         }
         return null;

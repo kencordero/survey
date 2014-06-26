@@ -161,7 +161,7 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = mDatabase.rawQuery("SELECT ro._id, ro.text FROM response_options ro " +
             "JOIN response_scale_response_options rsro ON ro._id = rsro.response_option_id " +
             "JOIN items i ON i.response_scale_id = rsro.response_scale_id " +
-            "WHERE i._id = ? ORDER BY rsro.sequence", new String[] {item.getId()});
+            "WHERE i._id = ? ORDER BY rsro.sequence", new String[] {Integer.toString(item.getId())});
         ResponseScale scale = new ResponseScale();
         if (cursor != null) {
             try {
@@ -169,7 +169,7 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
                 do {
                     int optionId = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_ID));
                     String optionText = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_TEXT));
-                    scale.addOption(Integer.toString(optionId), optionText);
+                    scale.addOption(optionId, optionText);
                 } while (cursor.moveToNext());
             } finally {
                 cursor.close();
@@ -190,7 +190,7 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
                 do {
                     int itemId = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_ID));
                     String itemText = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_TEXT));
-                    survey.addItem(Integer.toString(itemId), itemText);
+                    survey.addItem(itemId, itemText);
                 } while (cursor.moveToNext());
             } finally {
                 cursor.close();
@@ -212,14 +212,14 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
         ResponseScale scale = getItemResponseScale(item);
         Cursor cursor = mDatabase.rawQuery("SELECT response_option_id, COUNT(*) as n " +
                 "FROM session_responses WHERE item_id = ? GROUP BY response_option_id",
-                new String[] {item.getId()});
+                new String[] {Integer.toString(item.getId())});
         if (cursor != null) {
             try {
                 cursor.moveToFirst();
                 do {
                     int optionId = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_RESPONSE_OPTION_ID));
                     int optionCount = cursor.getInt(cursor.getColumnIndex("n"));
-                    scale.getOption(Integer.toString(optionId)).setCount(optionCount);
+                    scale.getOption(optionId).setCount(optionCount);
                 } while (cursor.moveToNext());
             } finally {
                 cursor.close();
@@ -242,6 +242,6 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
             }
         }
         Log.i(TAG, "Retrieved item #" + itemId + ": " + itemText);
-        return new Item(Integer.toString(itemId), itemText);
+        return new Item(itemId, itemText);
     }
 }

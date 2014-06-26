@@ -59,7 +59,7 @@ public class SurveyItemFragment extends Fragment {
         RadioGroup layout = (RadioGroup)getView().findViewById(R.id.responseOptionsRadioGroup);
         layout.removeAllViews();
         for (int i = 0; i < mItem.getOptionCount(); ++i) {
-            ResponseOption option = mItem.getOption(i);
+            ResponseOption option = mItem.getOptions().get(i);
             RadioButton button = new RadioButton(getActivity());
             button.setTag(option);
             button.setText(option.getText());
@@ -88,7 +88,7 @@ public class SurveyItemFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate");
         
-        String itemId = getArguments().getString(EXTRA_ITEM_ID);
+        int itemId = getArguments().getInt(EXTRA_ITEM_ID);
         mIsFirst = getArguments().getBoolean(EXTRA_IS_FIRST);
         mIsLast = getArguments().getBoolean(EXTRA_IS_LAST);
         mItem = Survey.get(getActivity()).getItem(itemId);
@@ -131,10 +131,10 @@ public class SurveyItemFragment extends Fragment {
         return view;
     }
     
-    public static SurveyItemFragment newInstance(String itemId, boolean isFirst, boolean isLast) {
+    public static SurveyItemFragment newInstance(int itemId, boolean isFirst, boolean isLast) {
         Log.i(TAG, "newInstance");
         Bundle bundle = new Bundle();
-        bundle.putSerializable(EXTRA_ITEM_ID, itemId);
+        bundle.putInt(EXTRA_ITEM_ID, itemId);
         bundle.putBoolean(EXTRA_IS_FIRST, isFirst);
         bundle.putBoolean(EXTRA_IS_LAST, isLast);
         
