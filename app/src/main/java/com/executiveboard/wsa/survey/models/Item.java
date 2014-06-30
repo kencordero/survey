@@ -38,10 +38,6 @@ public class Item {
         return mResponseScale.getOptionCount();
     }
     
-    public ResponseOption getOption(int idx) {
-        return mResponseScale.getOption(idx);
-    }
-    
     public int getId() {
         return mId;
     }

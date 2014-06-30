@@ -44,10 +44,7 @@ public class ReportFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_report, parent, false);
-
-
-        return view;
+        return inflater.inflate(R.layout.fragment_report, parent, false);
     }
 
     @Override
@@ -76,7 +73,6 @@ public class ReportFragment extends Fragment {
             statView.setGravity(Gravity.CENTER_HORIZONTAL);
             statLayout.addView(statView);
         }
-
     }
 
     @Override
