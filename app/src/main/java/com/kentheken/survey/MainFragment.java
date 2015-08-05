@@ -1,4 +1,4 @@
-package com.executiveboard.wsa.survey;
+package com.kentheken.survey;
 
 import android.content.Intent;
 import android.os.Bundle;

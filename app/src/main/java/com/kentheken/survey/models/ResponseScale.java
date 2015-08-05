@@ -1,4 +1,4 @@
-package com.executiveboard.wsa.survey.models;
+package com.kentheken.survey.models;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.executiveboard.wsa.survey;
+package com.kentheken.survey;
 
 import android.support.v4.app.Fragment;
 

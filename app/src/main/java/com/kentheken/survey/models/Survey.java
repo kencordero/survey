@@ -1,8 +1,8 @@
-package com.executiveboard.wsa.survey.models;
-
-import java.util.ArrayList;
+package com.kentheken.survey.models;
 
 import android.content.Context;
+
+import java.util.ArrayList;
 
 public class Survey {
     private ArrayList<Item> mItems;

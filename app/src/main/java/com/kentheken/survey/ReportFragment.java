@@ -1,4 +1,4 @@
-package com.executiveboard.wsa.survey;
+package com.kentheken.survey;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,15 +11,15 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.executiveboard.wsa.survey.models.Item;
-import com.executiveboard.wsa.survey.models.ResponseOption;
+import com.kentheken.survey.models.Item;
+import com.kentheken.survey.models.ResponseOption;
 
 /**
  * Created by kcordero on 6/12/2014.
  */
 public class ReportFragment extends Fragment {
     private static final String TAG = "ReportFragment";
-    private static final String EXTRA_ITEM_ID = "com.executiveboard.wsa.survey.item_id";
+    private static final String EXTRA_ITEM_ID = "com.executiveboard.wsa.com.kentheken.survey.item_id";
 
     private Callbacks mCallbacks;
     private Item mItem;

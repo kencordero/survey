@@ -1,4 +1,4 @@
-package com.executiveboard.wsa.survey;
+package com.kentheken.survey;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,9 +9,9 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.executiveboard.wsa.survey.models.Item;
-import com.executiveboard.wsa.survey.models.ResponseScale;
-import com.executiveboard.wsa.survey.models.Survey;
+import com.kentheken.survey.models.Item;
+import com.kentheken.survey.models.ResponseScale;
+import com.kentheken.survey.models.Survey;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -160,9 +160,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // public helper methods to access and get content from the database.
     public ResponseScale getItemResponseScale(Item item) {
         Cursor cursor = mDatabase.rawQuery("SELECT ro._id, ro.text FROM response_options ro " +
-            "JOIN response_scale_response_options rsro ON ro._id = rsro.response_option_id " +
-            "JOIN items i ON i.response_scale_id = rsro.response_scale_id " +
-            "WHERE i._id = ? ORDER BY rsro.sequence", new String[] {Integer.toString(item.getId())});
+                "JOIN response_scale_response_options rsro ON ro._id = rsro.response_option_id " +
+                "JOIN items i ON i.response_scale_id = rsro.response_scale_id " +
+                "WHERE i._id = ? ORDER BY rsro.sequence", new String[]{Integer.toString(item.getId())});
         ResponseScale scale = new ResponseScale();
         if (cursor != null) {
             try {
@@ -181,7 +181,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     
     public Survey getSurvey() {
         Survey survey = Survey.get(mContext);
-        if (survey.getItemCount() > 0) // survey already populated
+        if (survey.getItemCount() > 0) // com.kentheken.survey already populated
             return survey;
         Cursor cursor = mDatabase.query(TABLE_ITEMS, new String[] {COL_ID, COL_TEXT}, null, null,
                 null, null, "RANDOM()", "5");
@@ -230,7 +230,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Item getRandomItem() {
-        Cursor cursor = mDatabase.query(TABLE_ITEMS, new String[] {COL_ID, COL_TEXT}, null, null,
+        Cursor cursor = mDatabase.query(TABLE_ITEMS, new String[]{COL_ID, COL_TEXT}, null, null,
                 null, null, "RANDOM()", "1");
         String itemText = null;
         int itemId = -1;

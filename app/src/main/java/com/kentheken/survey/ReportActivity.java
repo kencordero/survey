@@ -1,8 +1,8 @@
-package com.executiveboard.wsa.survey;
+package com.kentheken.survey;
 
 import android.support.v4.app.Fragment;
 
-import com.executiveboard.wsa.survey.models.Item;
+import com.kentheken.survey.models.Item;
 
 /**
  * Created by kcordero on 6/12/2014.

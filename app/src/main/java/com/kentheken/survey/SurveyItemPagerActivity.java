@@ -1,4 +1,4 @@
-package com.executiveboard.wsa.survey;
+package com.kentheken.survey;
 
 import android.annotation.TargetApi;
 import android.os.Build;
@@ -10,8 +10,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.executiveboard.wsa.survey.models.Item;
-import com.executiveboard.wsa.survey.models.Survey;
+import com.kentheken.survey.models.Item;
+import com.kentheken.survey.models.Survey;
 
 public class SurveyItemPagerActivity extends FragmentActivity implements SurveyItemFragment.Callbacks {
     private static final String TAG = "SurveyItemPagerActivity";

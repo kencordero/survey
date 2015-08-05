@@ -1,4 +1,4 @@
-package com.executiveboard.wsa.survey;
+package com.kentheken.survey;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -12,15 +12,15 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.executiveboard.wsa.survey.models.Item;
-import com.executiveboard.wsa.survey.models.ResponseOption;
-import com.executiveboard.wsa.survey.models.Survey;
+import com.kentheken.survey.models.Item;
+import com.kentheken.survey.models.ResponseOption;
+import com.kentheken.survey.models.Survey;
 
 public class SurveyItemFragment extends Fragment {
     private static final String TAG = "SurveyItemFragment";
-    private static final String EXTRA_ITEM_ID = "com.executiveboard.wsa.survey.item_id";
-    private static final String EXTRA_IS_FIRST = "com.executiveboard.wsa.survey.is_first";
-    private static final String EXTRA_IS_LAST = "com.executiveboard.wsa.survey.is_last";
+    private static final String EXTRA_ITEM_ID = "com.executiveboard.wsa.com.kentheken.survey.item_id";
+    private static final String EXTRA_IS_FIRST = "com.executiveboard.wsa.com.kentheken.survey.is_first";
+    private static final String EXTRA_IS_LAST = "com.executiveboard.wsa.com.kentheken.survey.is_last";
     private Button mSubmitButton;
     private Item mItem;
     private Callbacks mCallbacks;
@@ -53,7 +53,7 @@ public class SurveyItemFragment extends Fragment {
         super.onResume();
         Log.i(TAG, "onResume");
                 
-        TextView itemTextView = (TextView)getView().findViewById(R.id.surveyItemText);        
+        TextView itemTextView = (TextView)getView().findViewById(R.id.surveyItemText);
         itemTextView.setText(mItem.getText());        
         
         RadioGroup layout = (RadioGroup)getView().findViewById(R.id.responseOptionsRadioGroup);
