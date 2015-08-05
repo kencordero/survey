@@ -18,7 +18,7 @@ public class SurveyItemPagerActivity extends FragmentActivity implements SurveyI
     private static final String DB_NAME = "survey.db3";
     
     private NonSwipeableViewPager mViewPager;
-    private SurveyDatabaseHelper mHelper;
+    private DatabaseHelper mHelper;
     private Survey mSurvey;
     private int mIdx;
 
@@ -30,7 +30,7 @@ public class SurveyItemPagerActivity extends FragmentActivity implements SurveyI
         mViewPager.setId(R.id.viewPager);
         setContentView(mViewPager);
         
-        mHelper = new SurveyDatabaseHelper(this, DB_NAME);
+        mHelper = new DatabaseHelper(this, DB_NAME);
         mHelper.openDatabase();
         
         mSurvey = mHelper.getSurvey();

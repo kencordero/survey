@@ -18,16 +18,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class SurveyDatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "SurveyDatabaseHelper";
     private static final int DB_VERSION = 1;
 
-    private static final String TABLE_NAME_SESSION_RESPONSES = "session_responses";
+    private static final String TABLE_SESSION_RESPONSES = "session_responses";
+    private static final String TABLE_ITEMS = "items";
 
-    private static final String COLUMN_NAME_ID = "_id";
-    private static final String COLUMN_NAME_TEXT = "text";
-    private static final String COLUMN_NAME_ITEM_ID = "item_id";
-    private static final String COLUMN_NAME_RESPONSE_OPTION_ID = "response_option_id";
+    private static final String COL_ID = "_id";
+    private static final String COL_TEXT = "text";
+    private static final String COL_ITEM_ID = "item_id";
+    private static final String COL_RESPONSE_OPTION_ID = "response_option_id";
 
     private SQLiteDatabase mDatabase;
     private final Context mContext;
@@ -44,7 +45,7 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
      * @param context activity or application context
      * @param dbName filename for database
      */
-    public SurveyDatabaseHelper(Context context, String dbName) {        
+    public DatabaseHelper(Context context, String dbName) {
         super(context, dbName, null, DB_VERSION);
         Log.i(TAG, "init");
         mDbName = dbName;
@@ -167,8 +168,8 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
             try {
                 cursor.moveToFirst();
                 do {
-                    int optionId = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_ID));
-                    String optionText = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_TEXT));
+                    int optionId = cursor.getInt(cursor.getColumnIndex(COL_ID));
+                    String optionText = cursor.getString(cursor.getColumnIndex(COL_TEXT));
                     scale.addOption(optionId, optionText);
                 } while (cursor.moveToNext());
             } finally {
@@ -182,14 +183,14 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
         Survey survey = Survey.get(mContext);
         if (survey.getItemCount() > 0) // survey already populated
             return survey;
-        Cursor cursor = mDatabase.rawQuery("SELECT _id, text FROM items ORDER BY RANDOM() LIMIT 5",
-                null);
+        Cursor cursor = mDatabase.query(TABLE_ITEMS, new String[] {COL_ID, COL_TEXT}, null, null,
+                null, null, "RANDOM()", "5");
         if (cursor != null) {
             try {
                 cursor.moveToFirst();
                 do {
-                    int itemId = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_ID));
-                    String itemText = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_TEXT));
+                    int itemId = cursor.getInt(cursor.getColumnIndex(COL_ID));
+                    String itemText = cursor.getString(cursor.getColumnIndex(COL_TEXT));
                     survey.addItem(itemId, itemText);
                 } while (cursor.moveToNext());
             } finally {
@@ -202,23 +203,23 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
     public void setSession() {
         ContentValues values = new ContentValues();
         for (Item item : Survey.get(mContext).getItems()) {
-            values.put(COLUMN_NAME_ITEM_ID, item.getId());
-            values.put(COLUMN_NAME_RESPONSE_OPTION_ID, item.getResponse().getId());
-            getWritableDatabase().insert(TABLE_NAME_SESSION_RESPONSES, null, values);
+            values.put(COL_ITEM_ID, item.getId());
+            values.put(COL_RESPONSE_OPTION_ID, item.getResponse().getId());
+            getWritableDatabase().insert(TABLE_SESSION_RESPONSES, null, values);
         }
     }
 
     public ResponseScale getOptionStats(Item item) {
         ResponseScale scale = getItemResponseScale(item);
-        Cursor cursor = mDatabase.rawQuery("SELECT response_option_id, COUNT(*) as n " +
-                "FROM session_responses WHERE item_id = ? GROUP BY response_option_id",
-                new String[] {Integer.toString(item.getId())});
+        Cursor cursor = mDatabase.query(TABLE_SESSION_RESPONSES,
+                new String[] {COL_RESPONSE_OPTION_ID, "COUNT(*)"}, COL_ITEM_ID + " = ?",
+                new String[] {String.valueOf(item.getId())}, COL_RESPONSE_OPTION_ID, null, null);
         if (cursor != null) {
             try {
                 cursor.moveToFirst();
                 do {
-                    int optionId = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_RESPONSE_OPTION_ID));
-                    int optionCount = cursor.getInt(cursor.getColumnIndex("n"));
+                    int optionId = cursor.getInt(cursor.getColumnIndex(COL_RESPONSE_OPTION_ID));
+                    int optionCount = cursor.getInt(cursor.getColumnIndex("COUNT(*)"));
                     scale.getOption(optionId).setCount(optionCount);
                 } while (cursor.moveToNext());
             } finally {
@@ -229,7 +230,8 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Item getRandomItem() {
-        Cursor cursor = mDatabase.rawQuery("SELECT _id, text FROM items ORDER BY RANDOM() LIMIT 1", null);
+        Cursor cursor = mDatabase.query(TABLE_ITEMS, new String[] {COL_ID, COL_TEXT}, null, null,
+                null, null, "RANDOM()", "1");
         String itemText = null;
         int itemId = -1;
         if (cursor != null) {

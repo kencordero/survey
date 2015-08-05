@@ -11,10 +11,10 @@ public class ReportActivity extends SingleFragmentActivity implements ReportFrag
     private static final String TAG = "ReportActivity";
     private static final String DB_NAME = "survey.db3";
 
-    private SurveyDatabaseHelper mHelper;
+    private DatabaseHelper mHelper;
 
     protected Fragment createFragment() {
-        mHelper = new SurveyDatabaseHelper(this, DB_NAME);
+        mHelper = new DatabaseHelper(this, DB_NAME);
         mHelper.openDatabase();
         return ReportFragment.newInstance();
     }
