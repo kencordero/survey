@@ -19,7 +19,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final String TAG = "SurveyDatabaseHelper";
+    private static final String TAG = DatabaseHelper.class.getSimpleName();
     private static final int DB_VERSION = 1;
 
     private static final String TABLE_SESSION_RESPONSES = "session_responses";
